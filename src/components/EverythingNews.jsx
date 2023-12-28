@@ -11,23 +11,33 @@ const EverythingNews = () => {
   const articlesPerPage = 6;
 
   useEffect(() => {
-    const fetchEverythingNews = async () => {
-      try {
-        const response = await axios.get('https://newsapi.org/v2/everything', {
-          params: {
-            q: searchQuery,
-            apiKey: '018856741e374777b96c86ce211500a2',
-          },
-        });
+    // Check if news data exists in local storage
+    const cachedNews = JSON.parse(localStorage.getItem('everythingNews'));
 
-        setNews(response.data.articles);
-      } catch (error) {
-        console.error('Error fetching everything news:', error);
-      }
-    };
-
-    fetchEverythingNews();
+    if (cachedNews) {
+      setNews(cachedNews);
+    } else {
+      fetchEverythingNews();
+    }
   }, [searchQuery]);
+
+  const fetchEverythingNews = async () => {
+    try {
+      const response = await axios.get('https://newsapi.org/v2/everything', {
+        params: {
+          q: searchQuery,
+          apiKey: '6ff075d2262d4097ac7a327669cf9a83',
+        },
+      });
+
+      setNews(response.data.articles);
+
+      // Store news data in local storage
+      localStorage.setItem('everythingNews', JSON.stringify(response.data.articles));
+    } catch (error) {
+      console.error('Error fetching everything news:', error);
+    }
+  };
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -87,7 +97,8 @@ const EverythingNews = () => {
                 >
                   Read More
                 </Button>
-                <Button id='share-button'
+                <Button
+                  id='share-button'
                   variant="success"
                   onClick={() => shareToWhatsApp(article.url)}
                   className="ml-2"

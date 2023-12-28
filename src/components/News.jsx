@@ -10,26 +10,36 @@ const News = () => {
   const articlesPerPage = 6;
 
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await axios.get(
-          'https://newsapi.org/v2/top-headlines',
-          {
-            params: {
-              country: 'us',
-              apiKey: '018856741e374777b96c86ce211500a2',
-            },
-          }
-        );
+    // Check if news data exists in local storage
+    const cachedNews = JSON.parse(localStorage.getItem('news'));
 
-        setNews(response.data.articles);
-      } catch (error) {
-        console.error('Error fetching news:', error);
-      }
-    };
-
-    fetchNews();
+    if (cachedNews) {
+      setNews(cachedNews);
+    } else {
+      fetchNews();
+    }
   }, []);
+
+  const fetchNews = async () => {
+    try {
+      const response = await axios.get(
+        'https://newsapi.org/v2/top-headlines',
+        {
+          params: {
+            country: 'us',
+            apiKey: '6ff075d2262d4097ac7a327669cf9a83',
+          },
+        }
+      );
+
+      setNews(response.data.articles);
+
+      // Store news data in local storage
+      localStorage.setItem('news', JSON.stringify(response.data.articles));
+    } catch (error) {
+      console.error('Error fetching news:', error);
+    }
+  };
 
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
@@ -67,7 +77,8 @@ const News = () => {
                 >
                   Read More
                 </Button>
-                <Button id='share-button'
+                <Button
+                  id='share-button'
                   variant="success"
                   onClick={() => shareToWhatsApp(article.url)}
                   className="ml-5"
