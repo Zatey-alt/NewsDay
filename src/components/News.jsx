@@ -27,7 +27,7 @@ const News = () => {
         {
           params: {
             country: 'us',
-            apiKey: '6ff075d2262d4097ac7a327669cf9a83',
+            apiKey: process.env.REACT_APP_API_KEY,
           },
         }
       );

@@ -26,7 +26,7 @@ const EverythingNews = () => {
       const response = await axios.get('https://newsapi.org/v2/everything', {
         params: {
           q: searchQuery,
-          apiKey: '6ff075d2262d4097ac7a327669cf9a83',
+          apiKey: process.env.REACT_APP_API_KEY,
         },
       });
 
