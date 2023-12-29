@@ -25,7 +25,7 @@ const News = () => {
         'https://api.mediastack.com/v1/news',
         {
           params: {
-            access_key: process.env.REACT_APP_MEDIASTACK_API_KEY,
+            access_key: '2066b0ffbe7c521ddb18ae92b1bfb103',
             countries: 'us',
           },
         }
