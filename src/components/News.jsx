@@ -3,7 +3,6 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Button, Pagination } from 'react-bootstrap';
 import { FaWhatsapp } from 'react-icons/fa';
-
 const News = () => {
   const [news, setNews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,19 +22,19 @@ const News = () => {
   const fetchNews = async () => {
     try {
       const response = await axios.get(
-        'https://newsapi.org/v2/top-headlines',
+        'https://api.mediastack.com/v1/news',
         {
           params: {
-            country: 'us',
-            apiKey: process.env.REACT_APP_API_KEY,
+            access_key: process.env.REACT_APP_MEDIASTACK_API_KEY,
+            countries: 'us',
           },
         }
       );
 
-      setNews(response.data.articles);
+      setNews(response.data.data);
 
       // Store news data in local storage
-      localStorage.setItem('news', JSON.stringify(response.data.articles));
+      localStorage.setItem('news', JSON.stringify(response.data.data));
     } catch (error) {
       console.error('Error fetching news:', error);
     }
@@ -64,7 +63,7 @@ const News = () => {
             <Card>
               <Card.Img
                 variant="top"
-                src={article.urlToImage || 'https://via.placeholder.com/150'}
+                src={article.image || 'https://via.placeholder.com/150'}
               />
               <Card.Body>
                 <Card.Title>{article.title}</Card.Title>

@@ -23,17 +23,17 @@ const EverythingNews = () => {
 
   const fetchEverythingNews = async () => {
     try {
-      const response = await axios.get('https://newsapi.org/v2/everything', {
+      const response = await axios.get('https://api.mediastack.com/v1/news', {
         params: {
-          q: searchQuery,
-          apiKey: process.env.REACT_APP_API_KEY,
+          access_key: process.env.REACT_APP_MEDIASTACK_API_KEY,
+          keywords: searchQuery,
         },
       });
 
-      setNews(response.data.articles);
+      setNews(response.data.data);
 
       // Store news data in local storage
-      localStorage.setItem('everythingNews', JSON.stringify(response.data.articles));
+      localStorage.setItem('everythingNews', JSON.stringify(response.data.data));
     } catch (error) {
       console.error('Error fetching everything news:', error);
     }
@@ -84,7 +84,7 @@ const EverythingNews = () => {
             <Card>
               <Card.Img
                 variant="top"
-                src={article.urlToImage || 'https://via.placeholder.com/150'}
+                src={article.image || 'https://via.placeholder.com/150'}
               />
               <Card.Body>
                 <Card.Title>{article.title}</Card.Title>
